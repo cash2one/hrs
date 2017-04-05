@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Flasky - Register{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="page-header">
+    <h1>Register</h1>
+</div>
+<form class="form form-horizontal" method="post" role="form">
+  {{ form.hidden_tag() }}
+  {{ wtf.form_errors(form, hiddens="only") }}
+
+  {{ wtf.form_field(form.name, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+  <div class="form-group required">
+      <label class="control-label  col-sm-4" for="verification">性别</label>
+      <!-- <div class="btn-group" data-toggle="buttons"> -->
+          <div class="col-sm-2" data-toggle="buttons">
+              <label class="btn btn-default btn-block">
+                  <input type="radio" name="sex" value="男" checked> 男
+              </label>
+          </div>
+          <div class="col-sm-2" data-toggle="buttons">
+              <label class="btn btn-default btn-block">
+                  <input type="radio" name="sex" value="女"> 女
+              </label>
+          </div>
+      <!-- </div> -->
+  </div>
+  {{ wtf.form_field(form.id_card_number, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+  {{ wtf.form_field(form.birthday, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+  {{ wtf.form_field(form.password, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+  {{ wtf.form_field(form.confirm, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+  {{ wtf.form_field(form.phone, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+  <div class="form-group  required">
+        <label class="control-label  col-sm-4" for="verification">手机验证码</label>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input class="form-control" id="verification" name="verification" required="" type="text">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" name='code'>获取验证码</button>
+                </span>
+            </div>
+        </div>
+</div>
+  <div class="form-group">
+  <div class="col-sm-offset-5 col-sm-2">
+      <input class="btn btn-primary btn-block" id="submit" name="submit" type="submit" value="注册">
+  </div>
+  </div>
+</form>
+</div>
+{% endblock %}
