@@ -39,3 +39,11 @@ class RegistrationForm(FlaskForm):
     phone = StringField(u'手机号码', validators=[Required()])
     verification = StringField(u'手机验证码', validators=[Required()])
     submit = SubmitField(u'注册')
+
+
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField(u'原密码', validators=[Required()])
+    verification = StringField(u'手机验证码', validators=[Required()])
+    password = PasswordField(u'设置新密码', validators=[Required()])
+    confirm = PasswordField(u'确认新密码', validators=[Required(), EqualTo('password', message=u'两次密码不相同')])
+    submit = SubmitField(u'确认修改')

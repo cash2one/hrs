@@ -1,6 +1,9 @@
 from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
+from flask import current_app
+import requests
+import json
 
 class Permissions:
     USER = 0x01
@@ -19,9 +22,6 @@ class User(UserMixin, db.Model):
     create_at = db.Column(db.String(20))
     registrations = db.relationship('Registration', backref='user', lazy='dynamic')
 
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -29,6 +29,37 @@ class User(UserMixin, db.Model):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    @staticmethod
+    def verify_code(phone, code):
+        VERIFY_SMS_CODE_URL = current_app.config['VERIFY_SMS_CODE_URL']
+        headers = {
+                "X-LC-Id": current_app.config['X_LC_ID'],
+                "X-LC-Key": current_app.config['X_LC_KEY'],
+                "Content-Type": "application/json",}
+        target_url = VERIFY_SMS_CODE_URL + "%s?mobilePhoneNumber=%s" % (code, phone)
+        r = requests.post(target_url, headers=headers)
+        if r.status_code == 200:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def send_msg(phone):
+        REQUEST_SMS_CODE_URL = current_app.config['REQUEST_SMS_CODE_URL']
+        headers = {
+                "X-LC-Id": current_app.config['X_LC_ID'],
+                "X-LC-Key": current_app.config['X_LC_KEY'],
+                "Content-Type": "application/json",}
+        data = {"mobilePhoneNumber": phone,}
+        r = requests.post(REQUEST_SMS_CODE_URL, data=json.dumps(data), headers=headers)
+        if r.status_code == 200:
+            return True
+        else:
+            return False
 
     def __repr__(self):
         return '<User %r>' % self.name

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="nav nav-pills nav-stacked">
+                <li>
+                    <a href="#">预约信息</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.info') }}">个人信息</a>
+                </li>
+                <li>
+                    <a href="#">意见与建议</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            {% block index_right %}
+            <span>hello</span>
+            {%  endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

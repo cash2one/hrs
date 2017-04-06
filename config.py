@@ -6,6 +6,12 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
+    #LeanCloud
+    X_LC_ID = 'nBR2kDUkL39Oihn12Died1Yj-gzGzoHsz'
+    X_LC_KEY = 'JWjaXCO1TwqhLC9Y5WWDb2tE'
+    REQUEST_SMS_CODE_URL = 'https://api.leancloud.cn/1.1/requestSmsCode'
+    VERIFY_SMS_CODE_URL = 'https://api.leancloud.cn/1.1/verifySmsCode/'
+
     @staticmethod
     def init_app(app):
         pass

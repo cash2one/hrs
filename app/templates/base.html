@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}云挂号{% endblock %}
 
 {% block head %}
 {{ super() }}
@@ -36,6 +36,7 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('auth.index') }}">个人中心</a></li>
           <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
           {% else %}
           <li><a href="{{ url_for('auth.login') }}">登录</a></li>
@@ -49,5 +50,5 @@
 
 {% block scripts %}
 {{ super() }}
-{{ moment.include_moment() }}
+<script src="{{ url_for('static', filename='js/sms.js') }}"></script>
 {% endblock %}
