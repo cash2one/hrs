@@ -1,3 +1,4 @@
+#coding:utf-8
 from flask import render_template, redirect, url_for, request
 from . import auth
 from .. import db
@@ -32,9 +33,11 @@ def register():
 
     if form.validate_on_submit():
         if User.verify_code(form.phone.data, form.verification.data):
+            addr = form.province.data + form.city.data + form.district.data
+            addr = addr.strip()
             user = User(name=form.name.data,
                         sex=form.sex.data,
-                        addr=form.addr.data,
+                        addr=addr,
                         id_card_number=form.id_card_number.data,
                         birthday=form.birthday.data,
                         password=form.password.data,
@@ -68,5 +71,6 @@ def change_password():
         if current_user.verify_password(form.old_password.data) and current_user.verify_code(current_user.phone, form.verification.data):
             current_user.password = form.password.data
             db.session.add(current_user)
+            db.session.commit()
             return redirect(url_for('auth.info'))
     return render_template('auth/change_password.html', form=form)

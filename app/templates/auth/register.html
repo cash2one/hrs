@@ -13,7 +13,7 @@
     {{ wtf.form_errors(form, hiddens="only") }}
     {{ wtf.form_field(form.name, "horizontal", horizontal_columns=('sm', 4, 4)) }}
     <div class="form-group required">
-        <label class="control-label  col-sm-4" for="verification">性别</label>
+        <label class="control-label  col-sm-4">性别</label>
         <!-- <div class="btn-group" data-toggle="buttons"> -->
         <div class="col-sm-2" data-toggle="buttons">
             <label class="btn btn-default btn-block">
@@ -29,6 +29,16 @@
     </div>
     {{ wtf.form_field(form.id_card_number, "horizontal", horizontal_columns=('sm', 4, 4)) }}
     {{ wtf.form_field(form.birthday, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+    <div class="form-group">
+        <label class="control-label col-sm-4">现居住地</label>
+        <div class="col-sm-4">
+            <div data-toggle="distpicker" id="distpicker">
+                <select class="col-sm-4 input-sm" name="province"></select>
+                <select class="col-sm-4 input-sm" name="city"></select>
+                <select class="col-sm-4 input-sm" name="district"></select>
+            </div>
+        </div>
+    </div>
     {{ wtf.form_field(form.password, "horizontal",horizontal_columns=('sm', 4, 4)) }}
     {{ wtf.form_field(form.confirm, "horizontal", horizontal_columns=('sm', 4, 4)) }}
     {{ wtf.form_field(form.phone, "horizontal", horizontal_columns=('sm', 4, 4)) }}

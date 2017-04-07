@@ -36,3 +36,7 @@ function loadXMLDoc(url) {
     xmlhttp.open("GET", url + "?phone=" + phone, true);
     xmlhttp.send(null);
 }
+
+$("#distpicker5").distpicker({
+    autoSelect: false
+})
