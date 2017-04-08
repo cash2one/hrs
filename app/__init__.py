@@ -1,9 +1,12 @@
+#coding: utf-8
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
+from flask_admin import Admin
 from config import config
+from flask_admin.contrib.sqla import ModelView
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -26,4 +29,7 @@ def create_app(config_name):
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    from .admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
     return app

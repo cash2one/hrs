@@ -7,6 +7,10 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date
 
+# import sys
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -74,3 +78,7 @@ def change_password():
             db.session.commit()
             return redirect(url_for('auth.info'))
     return render_template('auth/change_password.html', form=form)
+
+@auth.route('/order', methods=['GET'])
+def order():
+    return render_template('auth/order.html')

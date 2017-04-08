@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Flasky - Register{% endblock %}
-
 {% block content %}
 <div class="container">
 <div class="page-header">
-    <h1>Register</h1>
+    <h1>注册</h1>
 </div>
 <form class="form form-horizontal" method="post" role="form">
     {{ form.hidden_tag() }}
@@ -32,7 +30,7 @@
     <div class="form-group">
         <label class="control-label col-sm-4">现居住地</label>
         <div class="col-sm-4">
-            <div data-toggle="distpicker" id="distpicker">
+            <div data-toggle="distpicker" id="addr">
                 <select class="col-sm-4 input-sm" name="province"></select>
                 <select class="col-sm-4 input-sm" name="city"></select>
                 <select class="col-sm-4 input-sm" name="district"></select>

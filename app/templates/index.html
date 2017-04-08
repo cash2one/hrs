@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Flasky{% endblock %}
-
 {% block content %}
 <div class="container">
 	<div class="row clearfix">
@@ -36,43 +34,36 @@
 			</div>
 		</div>
 	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
+	<div class="row clearfix" id="order">
+		<div class="col-md-4">
 			<ul class="nav nav-stacked nav-pills">
 				<li class="active">
 					 <span>按医院挂号</span>
 				</li>
+				{% for hospital in hospitals %}
 				<li>
-					 <a href="#">简介</a>
+					<p>
+					 	<a href="#">{{ hospital.name }}</a>
+				 	</p>
+					<div class="col-sm-12">
+						<p>咨询电话：{{ hospital.phone }}</p>
+						<p>医院地址：{{ hospital.addr }}</p>
+					</div>
 				</li>
-				<li>
-					 <a href="#">信息</a>
-				</li>
+				{% endfor %}
 			</ul>
 		</div>
-		<div class="col-md-4 column">
+		<div class="col-md-4">
 			<ul class="nav nav-pills nav-stacked">
 				<li class="active">
 					 <span>按科室挂号</span>
 				</li>
-				<li>
-					 <a href="#">简介</a>
-				</li>
-				<li>
-					 <a href="#">信息</a>
-				</li>
 			</ul>
 		</div>
-		<div class="col-md-4 column">
+		<div class="col-md-4">
 			<ul class="nav nav-stacked nav-pills">
 				<li class="active">
 					 <span>按疾病挂号</span>
-				</li>
-				<li>
-					 <a href="#">简介</a>
-				</li>
-				<li>
-					 <a href="#">信息</a>
 				</li>
 			</ul>
 		</div>

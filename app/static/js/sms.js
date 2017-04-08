@@ -37,6 +37,7 @@ function loadXMLDoc(url) {
     xmlhttp.send(null);
 }
 
-$("#distpicker5").distpicker({
+$("#addr").distpicker({
     autoSelect: false
-})
+});
+$("#change-addr").distpicker();

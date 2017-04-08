@@ -16,13 +16,20 @@
             </li>
         </ul>
     </div>
+</div>
+<hr />
+<div class="row">
     {% block info_bottom %}
-    <hr />
-    <form class="form form-horizontal" method="post" role="form">
+    <div>
         <p>姓名：{{ current_user.name }}</p>
         <p>身份证号码：{{ current_user.id_card_number }}</p>
-        <p>手机号码：{{ current_user.phone }}</p>
-    </form>
+        <p>
+            <span>现居住地: {{ current_user.addr }}  <a href="#">修改居住地</a></span>
+        </p>
+        <p>
+            <span>手机号码：{{ current_user.phone }}  <a href="#">修改绑定手机</a></span>
+        </p>
+    </div>
     {% endblock %}
 </div>
 {% endblock %}
