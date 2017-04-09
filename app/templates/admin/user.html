@@ -1,0 +1,21 @@
+{% extends "admin/index.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for user in users %}
+        <div class="col-sm-8">
+            <p class="bg-info">
+                <span>姓名：{{ user.name }}</span>
+                <span>身份证号码：{{ user.id_card_number }}</span>
+                <span>现居住地: {{ user.addr }}</span>
+                <span>手机号码：{{ user.phone }}</span>
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-default" type="button">修改</button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

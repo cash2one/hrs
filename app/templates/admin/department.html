@@ -1,0 +1,28 @@
+{% extends "admin/index.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ url_for('admin.add_department') }}">添加科室</a></li>
+                <li>ss</li>
+                <li>ss</li>
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            {% for department in departments %}
+            <div class="col-sm-8">
+                <p class="bg-info">
+                    <span>科室名：{{ department.name }}</span>
+                    <span>简介：{{ department.intro }}</span>
+                </p>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn btn-default" type="button">修改</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

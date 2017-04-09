@@ -1,0 +1,30 @@
+{% extends "admin/index.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ url_for('admin.add_registration') }}">挂号</a></li>
+                <li>ss</li>
+                <li>ss</li>
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            {% for registration in registrations %}
+            <div class="col-sm-8">
+                <p class="bg-info">
+                    <span>日期：{{ registration.date }}</span>
+                    <span>时间：{{ registration.time }}</span>
+                    <span>状态：{{ registration.state }}</span>
+                    <span>创建时间：{{ registration.create_at }}</span>
+                </p>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn btn-default" type="button">修改</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

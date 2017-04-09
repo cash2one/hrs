@@ -15,3 +15,28 @@ class ChangePasswordForm(FlaskForm):
     password = PasswordField(u'设置新密码', validators=[Required()])
     confirm = PasswordField(u'确认新密码', validators=[Required(), EqualTo('password', message=u'两次密码不相同')])
     submit = SubmitField(u'确认修改')
+
+class DoctorForm(FlaskForm):
+    name = StringField(u'名字', validators=[Required()])
+    rank = StringField(u'级别', validators=[Required()])
+    submit = SubmitField(u'确认')
+
+class DepartmentForm(FlaskForm):
+    name = StringField(u'科室名', validators=[Required()])
+    intro = StringField(u'简介', validators=[Required()])
+    submit = SubmitField(u'确认')
+
+class HospitalForm(FlaskForm):
+    name = StringField(u'医院名', validators=[Required()])
+    intro = StringField(u'简介', validators=[Required()])
+    addr = StringField(u'地址', validators=[Required()])
+    phone = StringField(u'咨询电话', validators=[Required()])
+    # notice = StringField(u'通知', validators=[Required()])
+    # period = StringField(u'周期', validators=[Required()])
+    submit = SubmitField(u'确认')
+
+class RegistrationForm(FlaskForm):
+    date = StringField(u'日期', validators=[Required()])
+    time = StringField(u'时间', validators=[Required()])
+    state = StringField(u'状态', validators=[Required()])
+    submit = SubmitField(u'确认')

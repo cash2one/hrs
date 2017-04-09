@@ -1,0 +1,30 @@
+{% extends "admin/index.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ url_for('admin.add_hospital') }}">添加医院</a></li>
+                <li>ss</li>
+                <li>ss</li>
+            </ul>
+        </div>
+        <div class="col-sm-8">
+            {% for hospital in hospitals %}
+            <div class="col-sm-8">
+                <p class="bg-info">
+                    <span>医院名：{{ hospital.name }}</span>
+                    <span>简介：{{ hospital.intro }}</span>
+                    <span>地址：{{ hospital.addr }}</span>
+                    <span>资讯电话：{{ hospital.phone }}</span>
+                </p>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn btn-default" type="button">修改</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
