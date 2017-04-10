@@ -141,7 +141,6 @@ class Department(db.Model):
     doctors = db.relationship('Doctor', backref='department', lazy='dynamic')
     hospital_id = db.Column(db.Integer, db.ForeignKey('hospitals.id'))
     registrations = db.relationship('Registration', backref='department', lazy='dynamic')
-    schedules = db.relationship('Schedule', backref='department', lazy='dynamic')
 
     def __repr__(self):
         return '<Department %r>' % self.name
@@ -193,7 +192,6 @@ class Registration(db.Model):
 class Schedule(db.Model):
     __tablename__ = 'schedules'
     id = db.Column(db.Integer, primary_key=True)
-    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'))
     date = db.Column(db.String(20))
     time = db.Column(db.String(10))

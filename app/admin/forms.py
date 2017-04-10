@@ -24,6 +24,7 @@ class DoctorForm(FlaskForm):
 class DepartmentForm(FlaskForm):
     name = StringField(u'科室名', validators=[Required()])
     intro = StringField(u'简介', validators=[Required()])
+    hospital = StringField()
     submit = SubmitField(u'确认')
 
 class HospitalForm(FlaskForm):
@@ -39,4 +40,10 @@ class RegistrationForm(FlaskForm):
     date = StringField(u'日期', validators=[Required()])
     time = StringField(u'时间', validators=[Required()])
     state = StringField(u'状态', validators=[Required()])
+    submit = SubmitField(u'确认')
+
+class ScheduleForm(FlaskForm):
+    date = StringField(u'日期', validators=[Required()])
+    time = StringField(u'时间', validators=[Required()])
+    limit = StringField(u'号源', validators=[Required()])
     submit = SubmitField(u'确认')

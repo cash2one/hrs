@@ -2,8 +2,8 @@
 from flask import render_template, redirect, url_for, request
 from . import admin
 from .. import db
-from ..models import Admin, User, Doctor, Department, Hospital, Registration
-from .forms import LoginForm, ChangePasswordForm, DoctorForm, DepartmentForm, HospitalForm, RegistrationForm
+from ..models import Admin, User, Doctor, Department, Hospital, Registration, Schedule
+from .forms import LoginForm, ChangePasswordForm, DoctorForm, DepartmentForm, HospitalForm, RegistrationForm, ScheduleForm
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 
@@ -97,13 +97,15 @@ def department_id(id):
 @login_required
 def add_department():
     form = DepartmentForm()
+    hospitals = Hospital.query.all()
     if form.validate_on_submit():
         department = Department(name=form.name.data,
-                                intro=form.intro.data)
+                                intro=form.intro.data,
+                                hospital_id=form.hospital.data)
         db.session.add(department)
         db.session.commit()
         return redirect(url_for('admin.department'))
-    return render_template('admin/add_department.html', form=form)
+    return render_template('admin/add_department.html', form=form, hospitals=hospitals)
 
 @admin.route('/hospital', methods=['GET', 'POST'])
 @login_required
@@ -156,3 +158,22 @@ def add_registration():
         db.session.commit()
         return redirect(url_for('admin.registration'))
     return render_template('admin/add_registration.html', form=form)
+
+@admin.route('/schedule', methods=['GET', 'POST'])
+@login_required
+def schedule():
+    schedules = Schedule.query.all()
+    return render_template('admin/schedule.html', schedules=schedules)
+
+@admin.route('/add-schedule', methods=['GET', 'POST'])
+@login_required
+def add_schedule():
+    form = ScheduleForm()
+    if form.validate_on_submit():
+        schedule = Schedule(date=form.date.data,
+                            time=form.time.data,
+                            limit=form.limit.data)
+        db.session.add(schedule)
+        db.session.commit()
+        return redirect(url_for('admin.schedule'))
+    return render_template('admin/add_schedule.html', form=form)
