@@ -3,25 +3,29 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="{{ url_for('admin.add_doctor') }}">添加医生</a></li>
-                <li>ss</li>
-                <li>ss</li>
-            </ul>
-        </div>
-        <div class="col-sm-8">
-            {% for doctor in doctors %}
-            <div class="col-sm-8">
-                <p class="bg-info">
-                    <span>姓名：{{ doctor.name }}</span>
-                    <span>级别：{{ doctor.rank }}</span>
-                </p>
+        <div class="col-sm-8 col-sm-offset-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p><a href="{{ url_for('admin.add_doctor') }}">添加医生</a></p>
+                </div>
+                <div class="col-sm-12">
+                    <dl>
+                        {% for doctor in doctors%}
+                        <dt>
+                            <p class="bg-info">
+                                <span>医生名：{{ doctor.name }}</span>
+                                <span class="text-right">删除</span>
+                                <span class="text-right">修改</span>
+                                <span class="text-right">查看预约</span>
+                            </p>
+                        </dt>
+                        <dd>
+                            <p> {{ doctor.rank }} </p>
+                        </dd>
+                        {% endfor %}
+                    </dl>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <button class="btn btn-default" type="button">修改</button>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </div>

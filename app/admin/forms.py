@@ -1,6 +1,6 @@
 #coding:utf-8
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import Required, Length, EqualTo
 from wtforms import ValidationError
@@ -17,14 +17,14 @@ class ChangePasswordForm(FlaskForm):
     submit = SubmitField(u'确认修改')
 
 class DoctorForm(FlaskForm):
+    department = StringField()
     name = StringField(u'名字', validators=[Required()])
     rank = StringField(u'级别', validators=[Required()])
     submit = SubmitField(u'确认')
 
 class DepartmentForm(FlaskForm):
     name = StringField(u'科室名', validators=[Required()])
-    intro = StringField(u'简介', validators=[Required()])
-    hospital = StringField()
+    intro = TextAreaField(u'简介', validators=[Required()])
     submit = SubmitField(u'确认')
 
 class HospitalForm(FlaskForm):
@@ -43,6 +43,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField(u'确认')
 
 class ScheduleForm(FlaskForm):
+    doctor = StringField()
     date = StringField(u'日期', validators=[Required()])
     time = StringField(u'时间', validators=[Required()])
     limit = StringField(u'号源', validators=[Required()])

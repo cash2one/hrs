@@ -1,11 +1,11 @@
 #coding:utf-8
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, jsonify
 from . import auth
 from .. import db
-from ..models import User
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm
+from ..models import User, Hospital, Department
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, OrderForm
 from flask_login import login_user, logout_user, login_required, current_user
-from datetime import date
+from datetime import date, datetime, timedelta
 
 # import sys
 # reload(sys)
@@ -55,7 +55,8 @@ def register():
 @auth.route('/index', methods=['GET'])
 @login_required
 def index():
-    return render_template('auth/index.html')
+    hospitals = Hospital.query.all()
+    return render_template('auth/index.html', hospitals=hospitals)
 
 @auth.route('/info', methods=['GET'])
 @login_required
@@ -79,6 +80,20 @@ def change_password():
             return redirect(url_for('auth.info'))
     return render_template('auth/change_password.html', form=form)
 
-@auth.route('/order', methods=['GET'])
+@auth.route('/order', methods=['GET', 'POST'])
 def order():
-    return render_template('auth/order.html')
+    form = OrderForm()
+    hospital = Hospital.query.first();
+    now = datetime.now()
+    week = [now + timedelta(days=i) for i in range(7)]
+    if form.validate_on_submit():
+        department = Department.query.get(form.department.data)
+        # date = form.date.data.strftime('%Y-%m-%d')
+        return render_template('auth/schedule.html', department=department, week=week)
+
+    return render_template('auth/order.html', form=form, hospital=hospital)
+
+@auth.route('/schedule/<int:department_id>', methods=['GET'])
+def schedule(department_id):
+    department = Department.query.get(department_id)
+    return render_template('auth/schedule.html', department=department)

@@ -2,6 +2,29 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
 <div class="container">
-    {{ wtf.quick_form(form, form_type="horizontal", horizontal_columns=('sm', 4, 4)) }}
+    <div class="row">
+        <form class="form form-horizontal" method="post" role="form">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hiddens="only") }}
+            <div class="form-group">
+                <label class="control-label col-sm-4">医生</label>
+                <div class="col-sm-4">
+                    <select class="form-control" name="doctor">
+                        {% for doctor in doctors %}
+                        <<option value="{{ doctor.id }}">{{ doctor.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {{ wtf.form_field(form.date, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+            {{ wtf.form_field(form.time, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+            {{ wtf.form_field(form.limit, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-2">
+                    <input class="btn btn-primary btn-block" name="submit" type="submit" value="确认">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

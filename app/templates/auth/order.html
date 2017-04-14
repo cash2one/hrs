@@ -2,5 +2,40 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
-挂号
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="bd">
+				<p class="h3 text-info">快速筛选</p>
+				<p>根据医院、科室快速筛选对应班次</p>
+				<p class="h3 text-info">适用人群</p>
+				<p>未确定具体病症，希望尽快就医确诊的普通患者</p>
+			</div>
+        </div>
+        <div class="col-sm-6">
+            <form class="form form-horizontal" method="post" role="form">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_errors(form, hiddens="only") }}
+                <div class="form-group">
+                    <label class="control-label col-sm-4">医院：</label>
+                    <div class="col-sm-4">
+                        <p class="form-control-static">{{ hospital.name }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4">科室：</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="department" name="department">
+                            {% for department in hospital.departments %}
+                            <<option value="{{ department.id }}">{{ department.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {{ wtf.form_field(form.date, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+                {{ wtf.form_field(form.submit, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

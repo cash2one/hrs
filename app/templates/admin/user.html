@@ -3,19 +3,25 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        {% for user in users %}
-        <div class="col-sm-8">
-            <p class="bg-info">
-                <span>姓名：{{ user.name }}</span>
-                <span>身份证号码：{{ user.id_card_number }}</span>
-                <span>现居住地: {{ user.addr }}</span>
-                <span>手机号码：{{ user.phone }}</span>
-            </p>
+        <div class="col-sm-8 col-sm-offset-2">
+            <dl>
+                {% for user in users %}
+                <dt>
+                    <p class="bg-info">
+                        <span>姓名：{{ user.name }}</span>
+                        <span class="text-right">删除</span>
+                        <span class="text-right">修改</span>
+                        <span class="text-right">查看预约</span>
+                    </p>
+                </dt>
+                <dd>
+                    <p><span>身份证号码：{{ user.id_card_number }}</span></p>
+                    <p><span>现居住地: {{ user.addr }}</span></p>
+                    <p><span>手机号码：{{ user.phone }}</span></p>
+                </dd>
+                {% endfor %}
+            </dl>
         </div>
-        <div class="col-sm-4">
-            <button class="btn btn-default" type="button">修改</button>
-        </div>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

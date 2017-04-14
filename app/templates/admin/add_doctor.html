@@ -2,6 +2,22 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
 <div class="container">
-    {{ wtf.quick_form(form, form_type="horizontal", horizontal_columns=('sm', 4, 4)) }}
+    <form class="form form-horizontal" method="post" role="form">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+        <div class="form-group">
+            <label class="control-label col-sm-4">科室</label>
+            <div class="col-sm-4">
+                <select class="form-control" name="department">
+                    {% for department in departments %}
+                    <<option value="{{ department.id }}">{{ department.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {{ wtf.form_field(form.name, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+        {{ wtf.form_field(form.rank, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+        {{ wtf.form_field(form.submit, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+    </form>
 </div>
 {% endblock %}

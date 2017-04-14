@@ -58,6 +58,18 @@
 				<li class="active">
 					 <span>按科室挂号</span>
 				</li>
+				{% for hospital in hospitals %}
+				{% for department in hospital.departments %}
+				<li>
+					<p>
+						<a href="{{ url_for('auth.order') }}">{{ department.name }}</a>
+					</p>
+					<div class="col-sm-12">
+						<p>简介：{{ department.intro }}</p>
+					</div>
+				</li>
+				{% endfor %}
+				{% endfor %}
 			</ul>
 		</div>
 		<div class="col-md-4">

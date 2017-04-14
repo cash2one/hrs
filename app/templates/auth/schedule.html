@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>星期一<p>{{ week[0].strftime("%Y-%m-%d") }}</p></td>
+                    <td>星期一<p>{{ week[1].strftime("%Y-%m-%d") }}</p></td>
+                    <td>星期一<p>{{ week[2].strftime("%Y-%m-%d") }}</p></td>
+                    <td>星期一<p>{{ week[3].strftime("%Y-%m-%d") }}</p></td>
+                    <td>星期一<p>{{ week[4].strftime("%Y-%m-%d") }}</p></td>
+                    <td>星期一<p>{{ week[5].strftime("%Y-%m-%d") }}</p></td>
+                    <td>星期一<p>{{ week[6].strftime("%Y-%m-%d") }}</p></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">上午</th>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>6</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <th scope="row">下午</th>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>2</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <th scope="row">晚上</th>
+                    <td>3ddddddddddddddd</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>2</td>
+                    <td>6</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-sm-8 col-sm-offset-2">
+            {% for doctor in department.doctors %}
+                {% for schedule in doctor.schedules %}
+                    {% if schedule.date >= week[0].strftime("%Y-%m-%d")%}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p>
+                                <span>{{ schedule.date }},{{ schedule.time }}:</span>
+                                <span>{{ schedule.doctor.name }}</span>
+                                <span>剩余号源:{{ schedule.limit }}</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-2 col-sm-offset-4">
+                            <a href="#">预约挂号</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,27 +3,23 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="{{ url_for('admin.add_hospital') }}">添加医院</a></li>
-                <li>ss</li>
-                <li>ss</li>
-            </ul>
-        </div>
-        <div class="col-sm-8">
-            {% for hospital in hospitals %}
-            <div class="col-sm-8">
-                <p class="bg-info">
-                    <span>医院名：{{ hospital.name }}</span>
-                    <span>简介：{{ hospital.intro }}</span>
-                    <span>地址：{{ hospital.addr }}</span>
-                    <span>资讯电话：{{ hospital.phone }}</span>
-                </p>
-            </div>
-            <div class="col-sm-4">
-                <button class="btn btn-default" type="button">修改</button>
-            </div>
-            {% endfor %}
+        <div class="col-sm-8 col-sm-offset-2">
+            <dl>
+                {% for hospital in hospitals %}
+                <dt>
+                    <p class="bg-info">
+                        <span>医院名：{{ hospital.name }}</span>
+                        <span class="text-right">修改</span>
+                        <span class="text-right">查看预约</span>
+                    </p>
+                </dt>
+                <dd>
+                    <p><span>地址：{{ hospital.addr }}</span></p>
+                    <p><span>资讯电话：{{ hospital.phone }}</span></p>
+                    <p>{{ hospital.intro }}</p>
+                </dd>
+                {% endfor %}
+            </dl>
         </div>
     </div>
 </div>
