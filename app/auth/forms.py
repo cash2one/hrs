@@ -32,3 +32,7 @@ class ChangePasswordForm(FlaskForm):
     password = PasswordField(u'设置新密码', validators=[Required()])
     confirm = PasswordField(u'确认新密码', validators=[Required(), EqualTo('password', message=u'两次密码不相同')])
     submit = SubmitField(u'确认修改')
+
+class OrderForm(FlaskForm):
+    department = StringField()
+    submit = SubmitField(u'预约挂号')

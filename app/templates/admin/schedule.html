@@ -1,28 +1,39 @@
 {% extends "admin/index.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="{{ url_for('admin.add_schedule') }}">添加排班表</a></li>
-                <li>ss</li>
-                <li>ss</li>
-            </ul>
-        </div>
-        <div class="col-sm-8">
-            {% for schedule in schedules %}
-            <div class="col-sm-8">
-                <p class="bg-info">
-                    <span>日期：{{ schedule.date }}</span>
-                    <span>时间：{{ schedule.time }}</span>
-                    <span>剩余号源：{{ schedule.limit }}</span>
-                </p>
+        <div class="col-sm-8 col-sm-offset-1">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p><a href="{{ url_for('admin.add_schedule') }}">添加排班</a></p>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>医生</th>
+                                <th>日期</th>
+                                <th>时间</th>
+                                <th>号源</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for schedule in schedules%}
+                            <tr>
+                                <td>{{ schedule.doctor.name }}</td>
+                                <td>{{ schedule.date }}</td>
+                                <td>{{ schedule.time }}</td>
+                                <td>{{ schedule.limit }}</td>
+                                <td class="alter-schedule" id={{schedule.id}}><button class="btn btn-danger btn-block" type="button">修改</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <button class="btn btn-default" type="button">修改</button>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </div>

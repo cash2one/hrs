@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    {% for doctor in department.doctors%}
+    <div class="row">
+        <div class="col-sm-3 col-sm-offset-1">
+            <p>
+                <span>{{ doctor.name }}</span>
+                <span>{{ doctor.rank }}</span>
+            </p>
+        </div>
+        <div class="col-sm-3">
+            <p>{{ doctor.name }}</p>
+        </div>
+        <div class="col-sm-3">
+            {%for schedule in doctor.schedules %}
+            {% if schedule.limit > 0 %}
+            <p class="schedule">
+                {{ schedule.date }},{{ schedule.time }}
+                <strong>剩余:{{ schedule.limit }}</strong>
+                <a href="#" id={{schedule.id}}>
+                    预约挂号
+                </a>
+            </p>
+            {% else %}
+            <p>{{ schedule.date }},{{ schedule.time }} <strong>约满</strong></p>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

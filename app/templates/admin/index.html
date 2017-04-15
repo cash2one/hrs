@@ -23,12 +23,13 @@
         <li><a href="{{ url_for('admin.registration') }}">管理预约</a></li>
         <li><a href="{{ url_for('admin.user') }}">管理用户</a></li>
         <li><a href="{{ url_for('admin.doctor') }}">管理医生</a></li>
-        <li><a href="{{ url_for('admin.department') }}">管理部门</a></li>
-        <li><a href="{{ url_for('admin.hospital') }}">管理医院</a></li>
+        <li><a href="{{ url_for('admin.department') }}">管理科室</a></li>
         <li><a href="{{ url_for('admin.schedule') }}">管理排班</a></li>
+        <li><a href="{{ url_for('admin.hospital') }}">管理医院</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
+          <li><a>欢迎您,{{ current_user.name }}</a></li>
           <li><a href="{{ url_for('admin.logout') }}">退出</a></li>
           {% else %}
           <li><a href="{{ url_for('admin.login') }}">登录</a></li>

@@ -3,27 +3,35 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="{{ url_for('admin.add_registration') }}">挂号</a></li>
-                <li>ss</li>
-                <li>ss</li>
-            </ul>
-        </div>
-        <div class="col-sm-8">
-            {% for registration in registrations %}
-            <div class="col-sm-8">
-                <p class="bg-info">
-                    <span>日期：{{ registration.date }}</span>
-                    <span>时间：{{ registration.time }}</span>
-                    <span>状态：{{ registration.state }}</span>
-                    <span>创建时间：{{ registration.create_at }}</span>
-                </p>
-            </div>
-            <div class="col-sm-4">
-                <button class="btn btn-default" type="button">修改</button>
-            </div>
-            {% endfor %}
+        <div class="col-sm-8 col-sm-offset-1">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>挂号人</th>
+                        <th>就诊日期</th>
+                        <th>就诊时间</th>
+                        <th>科室</th>
+                        <th>医生</th>
+                        <th>订单状态</th>
+                        <th>订单时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registration in registrations%}
+                    <tr>
+                        <td>{{ registration.user.name }}</td>
+                        <td>{{ registration.date }}</td>
+                        <td>{{ registration.time }}</td>
+                        <td>{{ registration.department.name }}</td>
+                        <td>{{ registration.doctor.name }}</td>
+                        <td>{{ registration.state }}</td>
+                        <td>{{ registration.create_at }}</td>
+                        <td class="alter-order" id={{registration.id}}><button class="btn btn-danger btn-block" type="button">修改</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

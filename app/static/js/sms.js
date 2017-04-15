@@ -37,6 +37,36 @@ function loadXMLDoc(url) {
     xmlhttp.send(null);
 }
 
+$(".schedule").on("click", "a", function() {
+    var self = this;
+    var schedule_id = self.id;
+    $.ajax({
+        url: "submit-order",
+        data: {
+            "schedule_id": schedule_id
+        },
+        type: "GET"
+    })
+    .done(function (data){
+        $(self).prev().text(data);
+    });
+});
+
+$("table").on("click", ".cancel-order", function() {
+    var self = this
+    var order_id = self.id;
+    $.ajax({
+        url: "cancel-order",
+        data: {
+            "order_id": order_id
+        },
+        type: "GET"
+    })
+    .done(function() {
+        $(self).parent().remove();
+    })
+});
+
 $("#addr").distpicker({
     autoSelect: false
 });

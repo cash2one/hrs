@@ -20,7 +20,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#order">预约挂号</a></li>
+        <li><a href="{{ url_for('auth.order') }}">预约挂号</a></li>
         <li><a href="#">疾病百科</a></li>
         <li><a href="#">最新公告</a></li>
       </ul>
@@ -36,7 +36,8 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
-          <li><a href="{{ url_for('auth.index') }}">个人中心</a></li>
+          <li><a>欢迎您,{{ current_user.name }}</a></li>
+          <li><a href="{{ url_for('auth.index')}}">个人中心</a></li>
           <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
           {% else %}
           <li><a href="{{ url_for('auth.login') }}">登录</a></li>

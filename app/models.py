@@ -114,6 +114,7 @@ class Admin(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     create_at = db.Column(db.String(20))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    hospital_id = db.Column(db.Integer, db.ForeignKey('hospitals.id'))
 
     @property
     def password(self):
@@ -169,6 +170,7 @@ class Hospital(db.Model):
     period = db.Column(db.String(5))
     notice = db.Column(db.Text)
     departments = db.relationship('Department', backref='hospital', lazy='dynamic')
+    admins = db.relationship('Admin', backref='hospital', lazy='dynamic')
 
     def __repr__(self):
         return '<Hospital %r>' % self.name

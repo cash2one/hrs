@@ -1,11 +1,11 @@
 #coding:utf-8
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, jsonify
 from . import auth
 from .. import db
-from ..models import User
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm
+from ..models import User, Hospital, Department, Schedule, Registration
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, OrderForm
 from flask_login import login_user, logout_user, login_required, current_user
-from datetime import date
+from datetime import date, datetime, timedelta
 
 # import sys
 # reload(sys)
@@ -55,7 +55,8 @@ def register():
 @auth.route('/index', methods=['GET'])
 @login_required
 def index():
-    return render_template('auth/index.html')
+    registrations = current_user.registrations.order_by('date').all()
+    return render_template('auth/index.html', registrations=registrations)
 
 @auth.route('/info', methods=['GET'])
 @login_required
@@ -79,6 +80,46 @@ def change_password():
             return redirect(url_for('auth.info'))
     return render_template('auth/change_password.html', form=form)
 
-@auth.route('/order', methods=['GET'])
+@auth.route('/order', methods=['GET', 'POST'])
 def order():
-    return render_template('auth/order.html')
+    form = OrderForm()
+    hospital = Hospital.query.first();
+    if form.validate_on_submit():
+        department_id = form.department.data
+        return redirect(url_for('auth.schedule', department_id=department_id))
+
+    return render_template('auth/order.html', form=form, hospital=hospital)
+
+@auth.route('/schedule/submit-order', methods=['GET'])
+@login_required
+def submit_order():
+    schedule_id = request.args.get('schedule_id')
+    schedule = Schedule.query.get(schedule_id)
+    registration = Registration(user_id=current_user.id,
+                                doctor_id=schedule.doctor.id,
+                                department_id=schedule.doctor.department.id,
+                                date=schedule.date,
+                                time=schedule.time,
+                                state=u'挂号',
+                                create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    schedule.limit -= 1
+    db.session.add(schedule)
+    db.session.add(registration)
+    db.session.commit()
+    return u'剩余:%s' %schedule.limit
+
+@auth.route('/cancel-order', methods=['GET'])
+@login_required
+def cancel_order():
+    order_id = request.args.get('order_id')
+    registration = Registration.query.get(order_id)
+
+    db.session.delete(registration)
+    db.session.commit()
+    return u'cancel order success'
+
+@auth.route('/schedule/<department_id>', methods=['GET'])
+@login_required
+def schedule(department_id):
+    department = Department.query.get(department_id)
+    return render_template('auth/schedule.html', department=department)

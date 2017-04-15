@@ -73,18 +73,20 @@ def doctor_id(id):
 @login_required
 def add_doctor():
     form = DoctorForm()
+    departments = Department.query.filter_by(hospital_id=current_user.hospital_id).all()
     if form.validate_on_submit():
         doctor = Doctor(name=form.name.data,
-                        rank=form.rank.data)
+                        rank=form.rank.data,
+                        department_id=form.department.data)
         db.session.add(doctor)
         db.session.commit()
         return redirect(url_for('admin.doctor'))
-    return render_template('admin/add_doctor.html', form=form)
+    return render_template('admin/add_doctor.html', form=form, departments=departments)
 
 @admin.route('/department', methods=['GET', 'POST'])
 @login_required
 def department():
-    departments = Department.query.all()
+    departments = Department.query.filter_by(hospital_id=current_user.hospital_id).all()
     return render_template('admin/department.html', departments=departments)
 
 @admin.route('/department/<int:id>', methods=['GET', 'POST'])
@@ -97,15 +99,14 @@ def department_id(id):
 @login_required
 def add_department():
     form = DepartmentForm()
-    hospitals = Hospital.query.all()
     if form.validate_on_submit():
         department = Department(name=form.name.data,
                                 intro=form.intro.data,
-                                hospital_id=form.hospital.data)
+                                hospital_id=current_user.hospital_id)
         db.session.add(department)
         db.session.commit()
         return redirect(url_for('admin.department'))
-    return render_template('admin/add_department.html', form=form, hospitals=hospitals)
+    return render_template('admin/add_department.html', form=form)
 
 @admin.route('/hospital', methods=['GET', 'POST'])
 @login_required
@@ -133,7 +134,7 @@ def add_hospital():
         return redirect(url_for('admin.hospital'))
     return render_template('admin/add_hospital.html', form=form)
 
-@admin.route('/registration', methods=['GET', 'POST'])
+@admin.route('/registration', methods=['GET'])
 @login_required
 def registration():
     registrations = Registration.query.all()
@@ -169,11 +170,13 @@ def schedule():
 @login_required
 def add_schedule():
     form = ScheduleForm()
+    doctors = Doctor.query.all()
     if form.validate_on_submit():
         schedule = Schedule(date=form.date.data,
                             time=form.time.data,
-                            limit=form.limit.data)
+                            limit=form.limit.data,
+                            doctor_id=form.doctor.data)
         db.session.add(schedule)
         db.session.commit()
         return redirect(url_for('admin.schedule'))
-    return render_template('admin/add_schedule.html', form=form)
+    return render_template('admin/add_schedule.html', form=form, doctors=doctors)

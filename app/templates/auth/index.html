@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <ul class="nav nav-pills nav-stacked">
                 <li>
-                    <a href="#">预约信息</a>
+                    <a href="{{ url_for('auth.index') }}">预约信息</a>
                 </li>
                 <li>
                     <a href="{{ url_for('auth.info') }}">个人信息</a>
@@ -19,8 +18,38 @@
         </div>
         <div class="col-sm-8">
             {% block index_right %}
-            <span>hello</span>
-            {%  endblock %}
+            <p class="bg-success">我的预约</p>
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>就诊日期</th>
+                            <th>就诊时间</th>
+                            <th>科室</th>
+                            <th>医生</th>
+                            <th>挂号人</th>
+                            <th>订单状态</th>
+                            <th>订单时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registration in registrations%}
+                        <tr>
+                            <td>{{ registration.date }}</td>
+                            <td>{{ registration.time }}</td>
+                            <td>{{ registration.department.name }}</td>
+                            <td>{{ registration.doctor.name }}</td>
+                            <td>{{ registration.user.name }}</td>
+                            <td>{{ registration.state }}</td>
+                            <td>{{ registration.create_at }}</td>
+                            <td class="cancel-order" id={{registration.id}}><button class="btn btn-danger btn-block" type="button">取消预约</button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endblock %}
         </div>
     </div>
 </div>
