@@ -16,8 +16,28 @@
                     </select>
                 </div>
             </div>
-            {{ wtf.form_field(form.date, "horizontal", horizontal_columns=('sm', 4, 4)) }}
-            {{ wtf.form_field(form.time, "horizontal", horizontal_columns=('sm', 4, 4)) }}
+            <div class="form-group">
+                {% set week_dict = {0:"星期一",1:"星期二",2:"星期三",3:"星期四",4:"星期五",5:"星期六",6:"星期日"} %}
+                <label class="control-label col-sm-4">星期</label>
+                <div class="col-sm-4">
+                    <select class="form-control" name="weekday">
+                        {% for k,v in week_dict.iteritems() %}
+                        <<option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                {% set time_dict = {0:"上午", 1:"下午", 2:"晚上"} %}
+                <label class="control-label col-sm-4">时间</label>
+                <div class="col-sm-4">
+                    <select class="form-control" name="weekday">
+                        {% for k,v in time_dict.iteritems() %}
+                        <<option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             {{ wtf.form_field(form.limit, "horizontal", horizontal_columns=('sm', 4, 4)) }}
             {{ wtf.form_field(form.submit, "horizontal", horizontal_columns=('sm', 4, 4)) }}
         </form>

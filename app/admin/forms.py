@@ -1,6 +1,6 @@
 #coding:utf-8
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import Required, Length, EqualTo
 from wtforms import ValidationError
@@ -35,7 +35,7 @@ class HospitalForm(FlaskForm):
     # period = StringField(u'周期', validators=[Required()])
     submit = SubmitField(u'确认')
 
-class RegistrationForm(FlaskForm):
+class OrderForm(FlaskForm):
     date = StringField(u'日期', validators=[Required()])
     time = StringField(u'时间', validators=[Required()])
     state = StringField(u'状态', validators=[Required()])
@@ -43,7 +43,7 @@ class RegistrationForm(FlaskForm):
 
 class ScheduleForm(FlaskForm):
     doctor = StringField()
-    date = StringField(u'日期', validators=[Required()])
-    time = StringField(u'时间', validators=[Required()])
-    limit = StringField(u'号源', validators=[Required()])
+    weekday = StringField()
+    time = StringField()
+    limit = IntegerField(u'号源', validators=[Required()])
     submit = SubmitField(u'确认')

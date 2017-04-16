@@ -1,0 +1,38 @@
+{% extends "admin/index.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-1">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>挂号人</th>
+                        <th>就诊日期</th>
+                        <th>就诊时间</th>
+                        <th>科室</th>
+                        <th>医生</th>
+                        <th>订单状态</th>
+                        <th>订单时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders%}
+                    <tr>
+                        <td>{{ order.user.name }}</td>
+                        <td>{{ order.date }}</td>
+                        <td>{{ order.time }}</td>
+                        <td>{{ order.department.name }}</td>
+                        <td>{{ order.doctor.name }}</td>
+                        <td>{{ order.state }}</td>
+                        <td>{{ order.create_at }}</td>
+                        <td class="alter-order" id={{order.id}}><button class="btn btn-danger btn-block" type="button">修改</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

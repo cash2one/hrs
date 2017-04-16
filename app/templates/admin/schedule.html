@@ -10,11 +10,13 @@
                     <p><a href="{{ url_for('admin.add_schedule') }}">添加排班</a></p>
                 </div>
                 <div class="col-sm-12">
+                    {% set week_dict = {0:"星期一",1:"星期二",2:"星期三",3:"星期四",4:"星期五",5:"星期六",6:"星期日"} %}
+                    {% set time_dict = {0:"上午", 1:"下午", 2:"晚上"} %}
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
                                 <th>医生</th>
-                                <th>日期</th>
+                                <th>星期</th>
                                 <th>时间</th>
                                 <th>号源</th>
                                 <th>操作</th>
@@ -24,8 +26,8 @@
                             {% for schedule in schedules%}
                             <tr>
                                 <td>{{ schedule.doctor.name }}</td>
-                                <td>{{ schedule.date }}</td>
-                                <td>{{ schedule.time }}</td>
+                                <td>{{ week_dict.get(schedule.weekday) }}</td>
+                                <td>{{ time_dict.get(schedule.time) }}</td>
                                 <td>{{ schedule.limit }}</td>
                                 <td class="alter-schedule" id={{schedule.id}}><button class="btn btn-danger btn-block" type="button">修改</button></td>
                             </tr>

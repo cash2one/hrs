@@ -2,8 +2,8 @@
 from flask import render_template, redirect, url_for, request
 from . import admin
 from .. import db
-from ..models import Admin, User, Doctor, Department, Hospital, Registration, Schedule
-from .forms import LoginForm, ChangePasswordForm, DoctorForm, DepartmentForm, HospitalForm, RegistrationForm, ScheduleForm
+from ..models import Admin, User, Doctor, Department, Hospital, Order, Schedule
+from .forms import LoginForm, ChangePasswordForm, DoctorForm, DepartmentForm, HospitalForm, OrderForm, ScheduleForm
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 
@@ -134,33 +134,33 @@ def add_hospital():
         return redirect(url_for('admin.hospital'))
     return render_template('admin/add_hospital.html', form=form)
 
-@admin.route('/registration', methods=['GET'])
+@admin.route('/order', methods=['GET'])
 @login_required
-def registration():
-    registrations = Registration.query.all()
-    return render_template('admin/registration.html', registrations=registrations)
+def order():
+    orders = Order.query.all()
+    return render_template('admin/order.html', orders=orders)
 
-@admin.route('/registration/<int:id>', methods=['GET', 'POST'])
+@admin.route('/order/<int:id>', methods=['GET', 'POST'])
 @login_required
-def registration_id(id):
-    registration = Registration.query.get(id)
-    return render_template('admin/registration.html', registrations=[registration])
+def order_id(id):
+    order = Order.query.get(id)
+    return render_template('admin/order.html', orders=[order])
 
-@admin.route('/add-registration', methods=['GET', 'POST'])
+@admin.route('/add-order', methods=['GET', 'POST'])
 @login_required
-def add_registration():
-    form = RegistrationForm()
+def add_order():
+    form = OrderForm()
     if form.validate_on_submit():
-        registration = Registration(date=form.date.data,
+        order = Order(date=form.date.data,
                             time=form.time.data,
                             state=form.state.data,
                             create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-        db.session.add(registration)
+        db.session.add(order)
         db.session.commit()
-        return redirect(url_for('admin.registration'))
-    return render_template('admin/add_registration.html', form=form)
+        return redirect(url_for('admin.order'))
+    return render_template('admin/add_order.html', form=form)
 
-@admin.route('/schedule', methods=['GET', 'POST'])
+@admin.route('/schedule', methods=['GET'])
 @login_required
 def schedule():
     schedules = Schedule.query.all()
@@ -172,7 +172,7 @@ def add_schedule():
     form = ScheduleForm()
     doctors = Doctor.query.all()
     if form.validate_on_submit():
-        schedule = Schedule(date=form.date.data,
+        schedule = Schedule(weekday=form.weekday.data,
                             time=form.time.data,
                             limit=form.limit.data,
                             doctor_id=form.doctor.data)

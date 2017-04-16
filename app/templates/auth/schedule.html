@@ -3,33 +3,89 @@
 
 {% block content %}
 <div class="container">
-    {% for doctor in department.doctors%}
     <div class="row">
-        <div class="col-sm-3 col-sm-offset-1">
-            <p>
-                <span>{{ doctor.name }}</span>
-                <span>{{ doctor.rank }}</span>
-            </p>
+        <div class="col-sm-10 col-sm-offset-2">
+            <h3>{{ department.name }}</h3>
+            <p>{{ department.intro }}</p>
         </div>
-        <div class="col-sm-3">
-            <p>{{ doctor.name }}</p>
-        </div>
-        <div class="col-sm-3">
-            {%for schedule in doctor.schedules %}
-            {% if schedule.limit > 0 %}
-            <p class="schedule">
-                {{ schedule.date }},{{ schedule.time }}
-                <strong>剩余:{{ schedule.limit }}</strong>
-                <a href="#" id={{schedule.id}}>
-                    预约挂号
-                </a>
-            </p>
-            {% else %}
-            <p>{{ schedule.date }},{{ schedule.time }} <strong>约满</strong></p>
-            {% endif %}
+        <div class="col-sm-8 col-sm-offset-2">
+            {% set doctors = department.doctors %}
+            {% set schedules = {} %}
+            {% set current_weekday = week_date.get("current_weekday") %}
+            {% set week_dict = {0:"星期一",1:"星期二",2:"星期三",3:"星期四",4:"星期五",5:"星期六",6:"星期日"} %}
+
+            {% for doctor in doctors %}
+                {% for schedule in doctor.schedules %}
+                    {% if schedules[schedule.weekday] %}
+                        {% do schedules[schedule.weekday].update({schedule.time:schedule.limit}) %}
+                    {% else %}
+                        {% do schedules.update({schedule.weekday:{schedule.time:schedule.limit}}) %}
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
+            <table class="table table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for i in range(7) %}
+                        <th>
+                            {{ week_dict.get( (current_weekday+i) % 7 ) }}
+                            <p>{{ week_date.get( (current_weekday+i) % 7 ) }}</p>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>上午</td>
+                        {% for i in range(7) %}
+                        <td>
+                            {% if schedules.get( (current_weekday+i) % 7) and schedules.get( (current_weekday+i) % 7).get(0) %}
+                                {% if schedules.get( (current_weekday+i) % 7).get(0) > 0 %}
+                                    <span>预约</span>
+                                    <p>剩余:{{ schedules.get( (current_weekday+i) % 7).get(0) }}</p>
+                                {% else %}
+                                    <p>约满<p>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>下午</td>
+                        {% for i in range(7) %}
+                        <td>
+                            {% if schedules.get( (current_weekday+i) % 7) and schedules.get( (current_weekday+i) % 7).get(1) %}
+                                {% if schedules.get( (current_weekday+i) % 7).get(1) > 0 %}
+                                    <span>预约</span>
+                                    <p>剩余:{{ schedules.get( (current_weekday+i) % 7).get(1) }}</p>
+                                {% else %}
+                                    <p>约满<p>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>晚上</td>
+                        {% for i in range(7) %}
+                        <td>
+                            {% if schedules.get( (current_weekday+i) % 7) and schedules.get( (current_weekday+i) % 7).get(2) %}
+                                {% if schedules.get( (current_weekday+i) % 7).get(1) > 0 %}
+                                    <span>预约</span>
+                                    <p>剩余:{{ schedules.get( (current_weekday+i) % 7).get(1) }}</p>
+                                {% else %}
+                                    <p>约满<p>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    {% endfor %}
+    <div class="row">
+    </div>
 </div>
 {% endblock %}

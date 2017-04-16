@@ -2,7 +2,7 @@
 from flask import render_template, redirect, url_for, request, jsonify
 from . import auth
 from .. import db
-from ..models import User, Hospital, Department, Schedule, Registration
+from ..models import User, Hospital, Department, Schedule, Order
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, OrderForm
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, datetime, timedelta
@@ -55,8 +55,8 @@ def register():
 @auth.route('/index', methods=['GET'])
 @login_required
 def index():
-    registrations = current_user.registrations.order_by('date').all()
-    return render_template('auth/index.html', registrations=registrations)
+    orders = current_user.orders.order_by('date').all()
+    return render_template('auth/index.html', orders=orders)
 
 @auth.route('/info', methods=['GET'])
 @login_required
@@ -95,16 +95,16 @@ def order():
 def submit_order():
     schedule_id = request.args.get('schedule_id')
     schedule = Schedule.query.get(schedule_id)
-    registration = Registration(user_id=current_user.id,
-                                doctor_id=schedule.doctor.id,
-                                department_id=schedule.doctor.department.id,
-                                date=schedule.date,
-                                time=schedule.time,
-                                state=u'挂号',
-                                create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    order = Order(user_id=current_user.id,
+                doctor_id=schedule.doctor.id,
+                department_id=schedule.doctor.department.id,
+                weekday=schedule.weekday,
+                time=schedule.time,
+                state=u'挂号',
+                create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     schedule.limit -= 1
     db.session.add(schedule)
-    db.session.add(registration)
+    db.session.add(order)
     db.session.commit()
     return u'剩余:%s' %schedule.limit
 
@@ -112,14 +112,22 @@ def submit_order():
 @login_required
 def cancel_order():
     order_id = request.args.get('order_id')
-    registration = Registration.query.get(order_id)
+    order = Order.query.get(order_id)
 
-    db.session.delete(registration)
+    db.session.delete(order)
     db.session.commit()
     return u'cancel order success'
 
 @auth.route('/schedule/<department_id>', methods=['GET'])
-@login_required
 def schedule(department_id):
     department = Department.query.get(department_id)
-    return render_template('auth/schedule.html', department=department)
+    week_date = {}
+    current_time = datetime.now()
+    current_weekday = current_time.weekday()
+    for i in range(7):
+        next_day = current_time + timedelta(days=i)
+        week_date[next_day.weekday()] = next_day.strftime('%Y-%m-%d')
+    week_date['current_time'] = current_time
+    week_date['current_weekday'] = current_weekday
+
+    return render_template('auth/schedule.html', department=department, week_date=week_date)

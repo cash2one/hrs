@@ -34,16 +34,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for registration in registrations%}
+                        {% for order in orders%}
                         <tr>
-                            <td>{{ registration.date }}</td>
-                            <td>{{ registration.time }}</td>
-                            <td>{{ registration.department.name }}</td>
-                            <td>{{ registration.doctor.name }}</td>
-                            <td>{{ registration.user.name }}</td>
-                            <td>{{ registration.state }}</td>
-                            <td>{{ registration.create_at }}</td>
-                            <td class="cancel-order" id={{registration.id}}><button class="btn btn-danger btn-block" type="button">取消预约</button></td>
+                            <td>{{ order.date }}</td>
+                            <td>{{ order.time }}</td>
+                            <td>{{ order.department.name }}</td>
+                            <td>{{ order.doctor.name }}</td>
+                            <td>{{ order.user.name }}</td>
+                            <td>{{ order.state }}</td>
+                            <td>{{ order.create_at }}</td>
+                            <td class="cancel-order" id={{order.id}}><button class="btn btn-danger btn-block" type="button">取消预约</button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
