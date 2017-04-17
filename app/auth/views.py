@@ -90,6 +90,28 @@ def order():
 
     return render_template('auth/order.html', form=form, hospital=hospital)
 
+@auth.route('/order-confirm/<schedule_id>', methods=['GET', 'POST'])
+@login_required
+def order_confirm(schedule_id):
+    schedule = Schedule.query.get(schedule_id)
+
+    if request.method == 'POST':
+        order = Order(user_id=current_user.id,
+                    doctor_id=schedule.doctor.id,
+                    department_id=schedule.doctor.department.id,
+                    date=schedule.date,
+                    weekday=schedule.weekday,
+                    time=schedule.time,
+                    state=u'挂号',
+                    create_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        schedule.limit -= 1
+        db.session.add(schedule)
+        db.session.add(order)
+        db.session.commit()
+        return redirect(url_for('auth.index'))
+
+    return render_template('auth/order_confirm.html')
+
 @auth.route('/schedule/submit-order', methods=['GET'])
 @login_required
 def submit_order():
@@ -106,7 +128,7 @@ def submit_order():
     db.session.add(schedule)
     db.session.add(order)
     db.session.commit()
-    return u'剩余:%s' %schedule.limit
+    return redirect(url_for('auth.index'))
 
 @auth.route('/cancel-order', methods=['GET'])
 @login_required
@@ -131,3 +153,11 @@ def schedule(department_id):
     week_date['current_weekday'] = current_weekday
 
     return render_template('auth/schedule.html', department=department, week_date=week_date)
+
+@auth.route('/show-doctor', methods=['GET', 'POST'])
+def show_doctor():
+    week_time = request.args.get('week_time')
+    weekday, time = week_time.split(',')
+    schedules = Schedule.query.filter_by(weekday=weekday, time=time).all()
+
+    return render_template('doctor_info.html', schedules=schedules)

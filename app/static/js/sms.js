@@ -37,9 +37,10 @@ function loadXMLDoc(url) {
     xmlhttp.send(null);
 }
 
-$(".schedule").on("click", "a", function() {
+$(".submit-order").on("click", function() {
     var self = this;
-    var schedule_id = self.id;
+    var schedule_id = $(self).children("input").val();
+    alert("ss");
     $.ajax({
         url: "submit-order",
         data: {
@@ -47,9 +48,6 @@ $(".schedule").on("click", "a", function() {
         },
         type: "GET"
     })
-    .done(function (data){
-        $(self).prev().text(data);
-    });
 });
 
 $("table").on("click", ".cancel-order", function() {
@@ -64,6 +62,21 @@ $("table").on("click", ".cancel-order", function() {
     })
     .done(function() {
         $(self).parent().remove();
+    })
+});
+
+$("table").on("click", ".kyy", function() {
+    var self = this
+    var week_time = $(self).children("input").val();
+    $.ajax({
+        url: "/auth/show-doctor",
+        data: {
+            "week_time": week_time
+        },
+        type: "GET"
+    })
+    .done(function (data) {
+        $(".doctor").html(data)
     })
 });
 

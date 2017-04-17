@@ -186,7 +186,7 @@ class Order(db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
     weekday = db.Column(db.Integer)
     date = db.Column(db.String(20))
-    time = db.Column(db.String(10))
+    time = db.Column(db.Integer)
     state = db.Column(db.String(10))
     create_at = db.Column(db.String(20))
 
@@ -198,6 +198,7 @@ class Schedule(db.Model):
     __tablename__ = 'schedules'
     id = db.Column(db.Integer, primary_key=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'))
+    date = db.Column(db.String(20))
     weekday = db.Column(db.Integer)
     time = db.Column(db.Integer)
     limit = db.Column(db.Integer)

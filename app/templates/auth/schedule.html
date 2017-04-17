@@ -17,7 +17,12 @@
             {% for doctor in doctors %}
                 {% for schedule in doctor.schedules %}
                     {% if schedules[schedule.weekday] %}
-                        {% do schedules[schedule.weekday].update({schedule.time:schedule.limit}) %}
+                        {% if schedules[schedule.weekday][schedule.time] %}
+                            {% set old_limit = schedules[schedule.weekday][schedule.time] %}
+                            {% do schedules[schedule.weekday].update({schedule.time:schedule.limit+old_limit}) %}
+                        {% else %}
+                            {% do schedules[schedule.weekday].update({schedule.time:schedule.limit}) %}
+                        {% endif %}
                     {% else %}
                         {% do schedules.update({schedule.weekday:{schedule.time:schedule.limit}}) %}
                     {% endif %}
@@ -39,14 +44,23 @@
                     <tr>
                         <td>上午</td>
                         {% for i in range(7) %}
-                        <td>
-                            {% if schedules.get( (current_weekday+i) % 7) and schedules.get( (current_weekday+i) % 7).get(0) %}
-                                {% if schedules.get( (current_weekday+i) % 7).get(0) > 0 %}
+                            {% set weekday = (current_weekday+i) % 7 %}
+                            {% set times = schedules.get(weekday) %}
+                            {% set limit = times.get(0) if times else None%}
+                            {% if times and limit %}
+                                {% if limit > 0 %}
+                                <td class="kyy">
                                     <span>预约</span>
-                                    <p>剩余:{{ schedules.get( (current_weekday+i) % 7).get(0) }}</p>
+                                    <p>剩余:{{ limit }}</p>
+                                    <input class="hidden" name="week_time" value="{{ weekday }},0"></input>
+                                </td>
                                 {% else %}
-                                    <p>约满<p>
+                                <td class="ym">
+                                    <span>预满</span>
+                                </td>
                                 {% endif %}
+                            {% else %}
+                                <td></td>
                             {% endif %}
                         </td>
                         {% endfor %}
@@ -54,38 +68,56 @@
                     <tr>
                         <td>下午</td>
                         {% for i in range(7) %}
-                        <td>
-                            {% if schedules.get( (current_weekday+i) % 7) and schedules.get( (current_weekday+i) % 7).get(1) %}
-                                {% if schedules.get( (current_weekday+i) % 7).get(1) > 0 %}
-                                    <span>预约</span>
-                                    <p>剩余:{{ schedules.get( (current_weekday+i) % 7).get(1) }}</p>
-                                {% else %}
-                                    <p>约满<p>
-                                {% endif %}
+                        {% set weekday = (current_weekday+i) % 7 %}
+                        {% set times = schedules.get(weekday) %}
+                        {% set limit = times.get(1) if times else None%}
+                        {% if times and limit %}
+                            {% if limit > 0 %}
+                            <td class="kyy">
+                                <span>预约</span>
+                                <p>剩余:{{ limit }}</p>
+                                <input class="hidden" name="week_time" value="{{ weekday }},1"></input>
+                            </td>
+                            {% else %}
+                            <td class="ym">
+                                <span>预满</span>
+                            </td>
                             {% endif %}
-                        </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    </td>
                         {% endfor %}
                     </tr>
                     <tr>
                         <td>晚上</td>
                         {% for i in range(7) %}
-                        <td>
-                            {% if schedules.get( (current_weekday+i) % 7) and schedules.get( (current_weekday+i) % 7).get(2) %}
-                                {% if schedules.get( (current_weekday+i) % 7).get(1) > 0 %}
-                                    <span>预约</span>
-                                    <p>剩余:{{ schedules.get( (current_weekday+i) % 7).get(1) }}</p>
-                                {% else %}
-                                    <p>约满<p>
-                                {% endif %}
+                        {% set weekday = (current_weekday+i) % 7 %}
+                        {% set times = schedules.get(weekday) %}
+                        {% set limit = times.get(2) if times else None%}
+                        {% if times and limit %}
+                            {% if limit > 0 %}
+                            <td class="kyy">
+                                <span>预约</span>
+                                <p>剩余:{{ limit }}</p>
+                                <input class="hidden" name="week_time" value="{{ weekday }},2"></input>
+                            </td>
+                            {% else %}
+                            <td class="ym">
+                                <span>预满</span>
+                            </td>
                             {% endif %}
-                        </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    </td>
                         {% endfor %}
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="row">
+    <div class="row doctor">
     </div>
 </div>
 {% endblock %}
