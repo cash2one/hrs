@@ -1,14 +1,37 @@
-{% extends "base.html" %}
+{% extends "hospital_info.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block content %}
+{% set hospital = schedule.doctor.department.hospital %}
+
+{% block hospital_content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2">
+        <div class="col-sm-8 col-sm-offset-3">
             <form class="form form-horizontal" method="post" role="form">
                 <div class="form-group">
-                    <div class="col-sm-offset-5 col-sm-2">
+                    <label class="col-sm-2 control-label">就诊人:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">{{current_user.name}}|{{current_user.id_card_number}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">就诊日期:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">{{schedule.date}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">预约医生:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">{{schedule.doctor.name}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-sm-offset-1">
                         <input class="btn btn-primary btn-block" name="submit" type="submit" value="预约">
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="{{url_for('auth.order')}}" class="btn btn-primary btn-block">返回<a>
                     </div>
                 </div>
             </form>

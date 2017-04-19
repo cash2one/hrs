@@ -5,6 +5,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from flask import current_app, request
 import requests
 import json
+from datetime import datetime, timedelta
 
 class Permission:
     MANAGE_USER = 0x01
@@ -203,5 +204,23 @@ class Schedule(db.Model):
     time = db.Column(db.Integer)
     limit = db.Column(db.Integer)
 
+    @staticmethod
+    def generate_date():
+        now = datetime.now()
+        weekday = now.weekday()
+        schedules = Schedule.query.all()
+        for schedule in schedules:
+            if schedule.weekday == weekday:
+                days = 7
+                schedule.date = (now+timedelta(days=days)).strftime('%Y-%m-%d')
+            elif schedule.weekday < weekday:
+                days = 7 - (weekday-schedule.weekday)
+                schedule.date = (now+timedelta(days=days)).strftime('%Y-%m-%d')
+            else:
+                days = schedule.weekday - weekday
+                schedule.date = (now+timedelta(days=days)).strftime('%Y-%m-%d')
+            db.session.add(schedule)
+        db.session.commit()
+
     def __repr__(self):
-        return '<Schedule %r>' % self.date
+        return '%s' % self.weekday

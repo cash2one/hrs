@@ -110,7 +110,7 @@ def order_confirm(schedule_id):
         db.session.commit()
         return redirect(url_for('auth.index'))
 
-    return render_template('auth/order_confirm.html')
+    return render_template('auth/order_confirm.html', schedule=schedule)
 
 @auth.route('/schedule/submit-order', methods=['GET'])
 @login_required

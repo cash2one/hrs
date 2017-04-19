@@ -29,7 +29,11 @@
                                 <td>{{ week_dict.get(schedule.weekday) }}</td>
                                 <td>{{ time_dict.get(schedule.time) }}</td>
                                 <td>{{ schedule.limit }}</td>
-                                <td class="alter-schedule" id={{schedule.id}}><button class="btn btn-danger btn-block" type="button">修改</button></td>
+                                <td>
+                                    <input class="hidden" name="schedule_id" value="{{schedule.id}}">
+                                    <button>保存</button>
+                                    <button>删除</button>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
