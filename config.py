@@ -5,7 +5,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'zhang created hrs'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    # BABEL_DEFAULT_LOCALE = 'zh_CN'
+    BABEL_DEFAULT_LOCALE = 'zh_CN'
 
     #LeanCloud
     X_LC_ID = 'nBR2kDUkL39Oihn12Died1Yj-gzGzoHsz'

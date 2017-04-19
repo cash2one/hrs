@@ -15,8 +15,8 @@ login_manager.login_view = 'auth.login'
 bootstrap = Bootstrap()
 moment = Moment()
 db = SQLAlchemy()
-# admin = Admin(name=u'后台管理系统', template_mode='bootstrap3')
-# babel = Babel()
+admins = Admin(name=u'后台管理系统', template_mode='bootstrap3')
+babel = Babel()
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -26,15 +26,16 @@ def create_app(config_name):
     bootstrap.init_app(app)
     moment.init_app(app)
     db.init_app(app)
-    # admin.init_app(app)
-    # babel.init_app(app)
-    #
-    # import models
-    # admin.add_view(ModelView(models.Schedule, db.session))
-    # admin.add_view(ModelView(models.User, db.session))
-    # admin.add_view(ModelView(models.Doctor, db.session))
-    # admin.add_view(ModelView(models.Department, db.session))
-    # admin.add_view(ModelView(models.Order, db.session))
+    admins.init_app(app)
+    babel.init_app(app)
+
+    import models
+    from .admin import views
+    admins.add_view(ModelView(models.Order, db.session))
+    admins.add_view(views.UserView(models.User, db.session))
+    admins.add_view(views.ScheduleView(models.Schedule, db.session))
+    admins.add_view(ModelView(models.Doctor, db.session))
+    admins.add_view(ModelView(models.Department, db.session))
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
@@ -42,6 +43,4 @@ def create_app(config_name):
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
-    from .admin import admin as admin_blueprint
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
     return app
