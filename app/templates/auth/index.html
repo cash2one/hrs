@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th>就诊日期</th>
+                            <th>就诊星期</th>
                             <th>就诊时间</th>
                             <th>科室</th>
                             <th>医生</th>
@@ -37,6 +38,7 @@
                         {% for order in orders%}
                         <tr>
                             <td>{{ order.date }}</td>
+                            <td>{{ order.weekday }}</td>
                             <td>{{ order.time }}</td>
                             <td>{{ order.department.name }}</td>
                             <td>{{ order.doctor.name }}</td>

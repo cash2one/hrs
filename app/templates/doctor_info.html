@@ -9,7 +9,8 @@
             </tr>
         </thead>
         <tbody>
-            {% for schedule in schedules%}
+            {% for schedule in schedules %}
+            {% if schedule.limit > 0 %}
             <tr>
                 <td>{{ schedule.doctor.name }}</td>
                 <td>{{ schedule.doctor.rank }}</td>
@@ -18,6 +19,7 @@
                     <a href="{{ url_for('auth.order_confirm', schedule_id=schedule.id) }}">预约挂号</a>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>

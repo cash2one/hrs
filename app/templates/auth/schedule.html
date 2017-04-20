@@ -17,15 +17,15 @@
 
             {% for doctor in doctors %}
                 {% for schedule in doctor.schedules %}
-                    {% if schedules[schedule.weekday] %}
-                        {% if schedules[schedule.weekday][schedule.time] %}
-                            {% set old_limit = schedules[schedule.weekday][schedule.time] %}
-                            {% do schedules[schedule.weekday].update({schedule.time:schedule.limit+old_limit}) %}
+                    {% if schedules[schedule.weekday_int] %}
+                        {% if schedules[schedule.weekday_int][schedule.time_int] %}
+                            {% set old_limit = schedules[schedule.weekday_int][schedule.time_int] %}
+                            {% do schedules[schedule.weekday_int].update({schedule.time_int:schedule.limit+old_limit}) %}
                         {% else %}
-                            {% do schedules[schedule.weekday].update({schedule.time:schedule.limit}) %}
+                            {% do schedules[schedule.weekday_int].update({schedule.time_int:schedule.limit}) %}
                         {% endif %}
                     {% else %}
-                        {% do schedules.update({schedule.weekday:{schedule.time:schedule.limit}}) %}
+                        {% do schedules.update({schedule.weekday_int:{schedule.time_int:schedule.limit}}) %}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -53,7 +53,7 @@
                                 <td class="kyy">
                                     <span>预约</span>
                                     <p>剩余:{{ limit }}</p>
-                                    <input class="hidden" name="week_time" value="{{ weekday }},0"></input>
+                                    <input class="hidden" name="week_time" value="{{department.id}},{{week_dict.get(weekday)}},上午"></input>
                                 </td>
                                 {% else %}
                                 <td class="ym">
@@ -77,7 +77,7 @@
                             <td class="kyy">
                                 <span>预约</span>
                                 <p>剩余:{{ limit }}</p>
-                                <input class="hidden" name="week_time" value="{{ weekday }},1"></input>
+                                <input class="hidden" name="week_time" value="{{department.id}},{{week_dict.get(weekday)}},下午"></input>
                             </td>
                             {% else %}
                             <td class="ym">
@@ -101,7 +101,7 @@
                             <td class="kyy">
                                 <span>预约</span>
                                 <p>剩余:{{ limit }}</p>
-                                <input class="hidden" name="week_time" value="{{ weekday }},2"></input>
+                                <input class="hidden" name="week_time" value="{{department.id}},{{week_dict.get(weekday)}},晚上"></input>
                             </td>
                             {% else %}
                             <td class="ym">

@@ -31,11 +31,12 @@ def create_app(config_name):
 
     import models
     from .admin import views
-    admins.add_view(ModelView(models.Order, db.session))
-    admins.add_view(views.UserView(models.User, db.session))
-    admins.add_view(views.ScheduleView(models.Schedule, db.session))
-    admins.add_view(ModelView(models.Doctor, db.session))
-    admins.add_view(ModelView(models.Department, db.session))
+    admins.add_view(views.OrderView(models.Order, db.session, name=u'订单'))
+    admins.add_view(views.UserView(models.User, db.session, name=u'用户'))
+    admins.add_view(views.ScheduleView(models.Schedule, db.session, name=u'排班'))
+    admins.add_view(views.DoctorView(models.Doctor, db.session, name=u'医生'))
+    admins.add_view(views.DepartmentView(models.Department, db.session, name=u'科室'))
+    admins.add_view(views.HospitalView(models.Hospital, db.session, name=u'医院'))
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

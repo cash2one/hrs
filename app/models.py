@@ -99,7 +99,7 @@ class User(UserMixin, db.Model):
             return False
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return self.name
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -132,7 +132,7 @@ class Admin(UserMixin, db.Model):
         return (self.permissions & permissions) == permissions
 
     def __repr__(self):
-        return '<Admin %r>' % self.name
+        return self.name
 
 
 class Department(db.Model):
@@ -146,7 +146,7 @@ class Department(db.Model):
     orders = db.relationship('Order', backref='department', lazy='dynamic')
 
     def __repr__(self):
-        return '<Department %r>' % self.name
+        return self.name
 
 
 class Doctor(db.Model):
@@ -160,7 +160,7 @@ class Doctor(db.Model):
     schedules = db.relationship('Schedule', backref='doctor', lazy='dynamic')
 
     def __repr__(self):
-        return '<Doctor %r>' % self.name
+        return self.name
 
 
 class Hospital(db.Model):
@@ -176,7 +176,7 @@ class Hospital(db.Model):
     admins = db.relationship('Admin', backref='hospital', lazy='dynamic')
 
     def __repr__(self):
-        return '<Hospital %r>' % self.name
+        return self.name
 
 
 class Order(db.Model):
@@ -185,11 +185,25 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'))
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
-    weekday = db.Column(db.Integer)
+    weekday = db.Column(db.String(10))
     date = db.Column(db.String(20))
-    time = db.Column(db.Integer)
+    time = db.Column(db.String(10))
     state = db.Column(db.String(10))
     create_at = db.Column(db.String(20))
+
+    @staticmethod
+    def generate_date(weekday):
+        now = datetime.now()
+        current_weekday = now.weekday()
+        if current_weekday == weekday:
+            days = 7
+            return (now+timedelta(days=days)).strftime('%Y-%m-%d')
+        elif current_weekday < weekday:
+            days = weekday - current_weekday
+            return (now+timedelta(days=days)).strftime('%Y-%m-%d')
+        else:
+            days = 7 + weekday - current_weekday
+            return (now+timedelta(days=days)).strftime('%Y-%m-%d')
 
     def __repr__(self):
         return '<Order %r>' % self.create_at
@@ -199,10 +213,29 @@ class Schedule(db.Model):
     __tablename__ = 'schedules'
     id = db.Column(db.Integer, primary_key=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'))
-    date = db.Column(db.String(20))
-    weekday = db.Column(db.Integer)
-    time = db.Column(db.Integer)
+    weekday = db.Column(db.String(10))
+    time = db.Column(db.String(10))
     limit = db.Column(db.Integer)
+
+    @property
+    def weekday_int(self):
+        t = Transform.query.filter_by(type='weekday', value=self.weekday).first()
+        return t.key
+
+    @weekday_int.setter
+    def weekday_int(self, value):
+        t = Transform.query.filter_by(type='weekday', key=value).first()
+        self.weekday = t.value
+
+    @property
+    def time_int(self):
+        t = Transform.query.filter_by(type='time', value=self.time).first()
+        return t.key
+
+    @time_int.setter
+    def time_int(self, value):
+        t = Transform.query.filter_by(type='time', key=value).first()
+        self.time = t.value
 
     @staticmethod
     def generate_date():
@@ -223,4 +256,11 @@ class Schedule(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return '%s' % self.weekday
+        return self.weekday
+
+class Transform(db.Model):
+    __tablename__ = 'transform'
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(10))
+    key = db.Column(db.Integer)
+    value = db.Column(db.String(10))

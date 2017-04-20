@@ -7,9 +7,9 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm, OrderForm
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, datetime, timedelta
 
-# import sys
-# reload(sys)
-# sys.setdefaultencoding('utf-8')
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -99,7 +99,7 @@ def order_confirm(schedule_id):
         order = Order(user_id=current_user.id,
                     doctor_id=schedule.doctor.id,
                     department_id=schedule.doctor.department.id,
-                    date=schedule.date,
+                    date=Order.generate_date(schedule.weekday_int),
                     weekday=schedule.weekday,
                     time=schedule.time,
                     state=u'挂号',
@@ -144,7 +144,7 @@ def cancel_order():
 def schedule(department_id):
     department = Department.query.get(department_id)
     week_date = {}
-    current_time = datetime.now()
+    current_time = datetime.now() + timedelta(days=1)
     current_weekday = current_time.weekday()
     for i in range(7):
         next_day = current_time + timedelta(days=i)
@@ -157,7 +157,12 @@ def schedule(department_id):
 @auth.route('/show-doctor', methods=['GET', 'POST'])
 def show_doctor():
     week_time = request.args.get('week_time')
-    weekday, time = week_time.split(',')
-    schedules = Schedule.query.filter_by(weekday=weekday, time=time).all()
-
+    department_id, weekday, time = week_time.split(',')
+    department = Department.query.get(department_id)
+    doctors = department.doctors.all()
+    schedules = []
+    for doctor in doctors:
+        schedule = doctor.schedules.filter_by(weekday=weekday, time=time).first()
+        if schedule:
+            schedules.append(schedule)
     return render_template('doctor_info.html', schedules=schedules)

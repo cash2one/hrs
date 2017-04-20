@@ -2,23 +2,59 @@
 from flask_admin.contrib.sqla import ModelView
 from .. import models
 
+class OrderView(ModelView):
+    can_create = False
+    column_labels = dict(weekday=u'星期', date=u'日期', time=u'时间', doctor=u'医生',
+                    user=u'患者', department=u'科室', state=u'状态', create_at=u'创建时间')
+    column_searchable_list = ['date', 'time', 'state', models.User.name,models.Doctor.name,
+                            models.Department.name]
+
 class UserView(ModelView):
     can_create = False
-    column_exclude_list = ['password_hash', ]
+    column_exclude_list = ['password_hash', 'birthday', 'create_at']
     column_searchable_list = ['name', 'phone', 'id_card_number']
-    form_excluded_columns = ['password_hash']
-    form_args = {
-        'name': {
-            'label': u'姓名',
-        }
-    }
-    inline_models = (models.Order, )
+    column_labels = dict(name=u'姓名', id_card_number=u'身份证号', sex=u'性别', addr=u'住址',
+                        phone=u'手机号码')
+    form_excluded_columns = ['password_hash', 'create_at', 'orders', 'birthday']
+
 
 class ScheduleView(ModelView):
-    form_args = {
-        'weekday': {
-            'label': u'星期',
-        }
+    column_exclude_list = ['date']
+    column_labels = dict(weekday=u'星期', time=u'时间', limit=u'号源', doctor=u'医生')
+    column_searchable_list = [models.Doctor.name, 'weekday', 'time']
+    form_excluded_columns = ['date']
+    form_choices = {
+        'weekday': [
+            (u'星期一', u'星期一'),
+            (u'星期二', u'星期二'),
+            (u'星期三', u'星期三'),
+            (u'星期四', u'星期四'),
+            (u'星期五', u'星期五'),
+            (u'星期六', u'星期六'),
+            (u'星期日', u'星期日')
+        ],
+        'time': [
+            (u'上午', u'上午'),
+            (u'下午', u'下午'),
+            (u'晚上', u'晚上')
+        ]
     }
-    column_searchable_list = ['doctor_id']
-    form_create_rules = ('date','weekday')
+
+class DoctorView(ModelView):
+    column_exclude_list = ['intro']
+    column_labels = dict(name=u'姓名', rank=u'职称', intro=u'简介', department=u'科室')
+    column_searchable_list = ['name', 'rank', models.Department.name]
+    form_excluded_columns = ['schedules', 'orders']
+
+class DepartmentView(ModelView):
+    column_exclude_list = ['intro', 'hospital']
+    column_labels = dict(name=u'科室', intro=u'简介', phone=u'联系电话', hospital=u'医院')
+    column_searchable_list = ['name']
+    form_excluded_columns = ['doctors', 'orders']
+
+class HospitalView(ModelView):
+    can_create = False
+    can_delete = False
+    column_exclude_list = ['intro', 'notice', 'period']
+    column_labels = dict(name=u'医院', intro=u'简介', phone=u'联系电话', addr=u'地址', notice=u'公告')
+    form_excluded_columns = ['departments', 'admins']
