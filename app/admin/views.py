@@ -1,6 +1,10 @@
 #coding:utf-8
 from flask_admin.contrib.sqla import ModelView
+from flask_admin import BaseView, expose, AdminIndexView
+from .forms import LoginForm
 from .. import models
+from flask_login import login_user, logout_user, current_user
+from flask import redirect, url_for
 
 class OrderView(ModelView):
     can_create = False
@@ -58,3 +62,25 @@ class HospitalView(ModelView):
     column_exclude_list = ['intro', 'notice', 'period']
     column_labels = dict(name=u'医院', intro=u'简介', phone=u'联系电话', addr=u'地址', notice=u'公告')
     form_excluded_columns = ['departments', 'admins']
+
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        if not current_user.is_authenticated:
+            return redirect(url_for('.login'))
+        return self.render('admin/my_master.html')
+
+    @expose('/login', methods=('GET', 'POST'))
+    def login(self):
+        form = LoginForm()
+        if form.validate_on_submit():
+            admin = models.Admin.query.filter_by(name=form.name.data).first()
+            if admin is not None and admin.verify_password(form.password.data):
+                login_user(admin, True)
+                return redirect(url_for('.index'))
+        return self.render('admin/login.html', form=form)
+
+    @expose('/logout')
+    def logout(self):
+        logout_user()
+        return redirect(url_for('.index'))

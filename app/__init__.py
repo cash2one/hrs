@@ -15,7 +15,6 @@ login_manager.login_view = 'auth.login'
 bootstrap = Bootstrap()
 moment = Moment()
 db = SQLAlchemy()
-admins = Admin(name=u'后台管理系统', template_mode='bootstrap3')
 babel = Babel()
 
 def create_app(config_name):
@@ -26,11 +25,13 @@ def create_app(config_name):
     bootstrap.init_app(app)
     moment.init_app(app)
     db.init_app(app)
-    admins.init_app(app)
     babel.init_app(app)
 
     import models
     from .admin import views
+    admins = Admin(name=u'后台管理系统', template_mode='bootstrap3', index_view=views.MyAdminIndexView(),
+            base_template='admin/my_master.html')
+    admins.init_app(app)
     admins.add_view(views.OrderView(models.Order, db.session, name=u'订单'))
     admins.add_view(views.UserView(models.User, db.session, name=u'用户'))
     admins.add_view(views.ScheduleView(models.Schedule, db.session, name=u'排班'))

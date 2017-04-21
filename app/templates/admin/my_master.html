@@ -1,0 +1,15 @@
+{% extends 'admin/base.html' %}
+{% block title %}云挂号后台管理{% endblock %}
+{% endif %}
+{% block access_control %}
+{% if current_user.is_authenticated %}
+<ul class="nav navbar-nav navbar-right">
+    <li><a>欢迎您,{{ current_user.name }}</a></li>
+    <li><a href="{{ url_for('admin.logout') }}">退出</a></li>
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block body %}
+<p>欢迎来到后台管理</p>
+{% endblock %}
