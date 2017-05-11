@@ -61,7 +61,7 @@ class HospitalView(ModelView):
     can_delete = False
     column_exclude_list = ['intro', 'notice', 'period']
     column_labels = dict(name=u'医院', intro=u'简介', phone=u'联系电话', addr=u'地址', notice=u'公告')
-    form_excluded_columns = ['departments', 'admins']
+    form_excluded_columns = ['departments', 'admins', 'period']
 
 class MyAdminIndexView(AdminIndexView):
     @expose('/')
